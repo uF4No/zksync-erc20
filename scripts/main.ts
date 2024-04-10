@@ -1,6 +1,6 @@
 import { AtlasEnvironment } from "atlas-ide";
 import { ContractFactory, utils} from 'zksync-ethers';
-import TokenArtifact from "../artifacts/MyToken";
+import TokenArtifact from "../artifacts/TestToken";
 import * as ethers from "ethers";
 
 // WALLET TO MINT TOKENS TO
@@ -13,12 +13,12 @@ export async function main (atlas: AtlasEnvironment) {
   const wallet = provider.getSigner();
 
   const factory = new ContractFactory(
-      TokenArtifact.MyToken.abi,
-      TokenArtifact.MyToken.evm.bytecode.object,
+      TokenArtifact.TestToken.abi,
+      TokenArtifact.TestToken.evm.bytecode.object,
       wallet,
       "create"
   );
-  const additionalFactoryDeps = [`0x${TokenArtifact.MyToken.evm.bytecode.object}`]
+  const additionalFactoryDeps = [`0x${TokenArtifact.TestToken.evm.bytecode.object}`]
 
   const additionalDeps = additionalFactoryDeps
             ? additionalFactoryDeps.map((val) => ethers.utils.hexlify(val))
@@ -26,7 +26,7 @@ export async function main (atlas: AtlasEnvironment) {
   const factoryDeps = [...additionalDeps];
 
   const tokenContract = await factory.deploy(
-      ...[utils.hashBytecode(`0x${TokenArtifact.MyToken.evm.bytecode.object}`)],
+      ...[utils.hashBytecode(`0x${TokenArtifact.TestToken.evm.bytecode.object}`)],
       {
         customData: {
           factoryDeps,
