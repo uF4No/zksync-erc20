@@ -1,9 +1,10 @@
 import { AtlasEnvironment } from "atlas-ide";
-import { ContractFactory, utils} from 'zksync-ethers';
+import { ContractFactory, Contract, utils} from 'zksync-web3';
 import TokenArtifact from "../artifacts/TestToken";
 import * as ethers from "ethers";
 
 // WALLET TO MINT TOKENS TO
+const TOKEN_CONTRACT_ADDRESS = ""
 const RECEIVER_WALLET    = "0x5eE49779dC4bd4CA802660678a8E3F57FB5f4a2b";
 const TOKEN_AMOUNT    = "333";
 
@@ -12,32 +13,13 @@ export async function main (atlas: AtlasEnvironment) {
   const provider = new Web3Provider(atlas.provider);
   const wallet = provider.getSigner();
 
-  const factory = new ContractFactory(
-      TokenArtifact.TestToken.abi,
-      TokenArtifact.TestToken.evm.bytecode.object,
-      wallet,
-      "create"
-  );
-  const additionalFactoryDeps = [`0x${TokenArtifact.TestToken.evm.bytecode.object}`]
+  const tokenContract= new Contract(TOKEN_CONTRACT_ADDRESS, TokenArtifact.TestToken.abi, wallet);
 
-  const additionalDeps = additionalFactoryDeps
-            ? additionalFactoryDeps.map((val) => ethers.utils.hexlify(val))
-            : [];
-  const factoryDeps = [...additionalDeps];
-
-  const tokenContract = await factory.deploy(
-      ...[utils.hashBytecode(`0x${TokenArtifact.TestToken.evm.bytecode.object}`)],
-      {
-        customData: {
-          factoryDeps,
-        },
-      }
-  );
-  console.log("tokenContract deploying...");
-  await tokenContract.deployed();
-  const receipt = await tokenContract.deployTransaction.wait();
-
-  console.log(`tokenContract address: ${receipt.contractAddress}`);
-
+  console.log("Minting tokens...");
+  const tx = await tokenContract.mint(RECEIVER_WALLET, ethers.utils.parseEther(TOKEN_AMOUNT));
+  await tx.wait();
+ 
   console.log("Success!");
+  console.log(`The account ${RECEIVER_WALLET} now has ${ethers.utils.parseEther(await tokenContract.balanceOf(RECEIVER_WALLET))} tokens`)
+
 }
