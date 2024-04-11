@@ -1,5 +1,5 @@
 import { AtlasEnvironment } from "atlas-ide";
-import { ContractFactory, Contract, utils} from 'zksync-web3';
+import { Web3Provider, Contract} from 'zksync-web3';
 import TokenArtifact from "../artifacts/TestToken";
 import * as ethers from "ethers";
 
