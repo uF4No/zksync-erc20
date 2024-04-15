@@ -1,5 +1,5 @@
 import { AtlasEnvironment } from "atlas-ide";
-import TokenArtifact from "../artifacts/MyToken";
+import TokenArtifact from "../artifacts/TestToken";
 import * as ethers from "ethers";
 
 // Address of the ERC20 token contract
