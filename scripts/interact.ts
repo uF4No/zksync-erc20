@@ -14,7 +14,7 @@ export async function main (atlas: AtlasEnvironment) {
   const wallet = provider.getSigner();
 
   // initialise token contract with address, abi and signer
-  const tokenContract= new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TokenArtifact.MyToken.abi, wallet);
+  const tokenContract= new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TokenArtifact.TestToken.abi, wallet);
 
   console.log("Minting tokens...");
   const tx = await tokenContract.mint(RECEIVER_WALLET, ethers.utils.parseEther(TOKEN_AMOUNT));
